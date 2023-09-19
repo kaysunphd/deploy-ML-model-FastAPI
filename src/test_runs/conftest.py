@@ -21,7 +21,7 @@ def data():
         Loaded clean data
     """
 
-    df = pd.read_csv("../../data/cleaned_census.csv")
+    df = pd.read_csv("data/cleaned_census.csv")
 
     return df
 
@@ -37,7 +37,7 @@ def trained_model():
         Loaded model
     """
 
-    output_path = "../../model"
+    output_path = "model"
     filename = os.path.join(output_path, "trained_model.pkl")
 
     with open(filename, 'rb') as fp:
@@ -57,7 +57,7 @@ def trained_encoder():
         Loaded encoder
     """
 
-    output_path = "../../model"
+    output_path = "model"
     filename = os.path.join(output_path, "trained_encoder.pkl")
 
     with open(filename, 'rb') as fp:
@@ -77,7 +77,7 @@ def trained_lb():
         Loaded binarizer
     """
 
-    output_path = "../../model"
+    output_path = "model"
     filename = os.path.join(output_path, "trained_lb.pkl")
 
     with open(filename, 'rb') as fp:
