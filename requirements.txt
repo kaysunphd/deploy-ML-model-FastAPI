@@ -1,10 +1,10 @@
-python==3.11
+python
 numpy
 pandas
 scikit-learn
 pytest
 requests
-fastapi==0.63.0
+fastapi
 uvicorn
 gunicorn
 pandas_profiling
