@@ -18,8 +18,8 @@ def load_data(filename):
     df: pd.DataFrame
         dataframe of loaded clean data
     """
-
-    df = pd.DataFrame(os.path.join("../../data"), filename)
+ 
+    df = pd.read_csv(os.path.join("../../data", filename))
     return df
 
 
@@ -65,7 +65,7 @@ def process_data(
         Trained LabelBinarizer if training is True, otherwise returns the binarizer
         passed in.
     """
-
+ 
     if label is not None:
         y = X[label]
         X = X.drop([label], axis=1)

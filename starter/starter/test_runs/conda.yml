@@ -1,0 +1,11 @@
+name: test_runs
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - pandas
+  - pytest
+  - scikit-learn
+  - pip
+  - pip:
+      - wandb
