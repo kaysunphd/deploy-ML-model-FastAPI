@@ -1,4 +1,4 @@
-python==3.8
+python==3.11
 numpy
 pandas
 scikit-learn
@@ -7,3 +7,5 @@ requests
 fastapi==0.63.0
 uvicorn
 gunicorn
+pandas_profiling
+wandb

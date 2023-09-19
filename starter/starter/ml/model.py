@@ -1,3 +1,4 @@
+import logging
 from sklearn.metrics import fbeta_score, precision_score, recall_score
 
 
