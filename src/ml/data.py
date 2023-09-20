@@ -1,23 +1,20 @@
+import os
 import numpy as np
 import pandas as pd
-import os
 from sklearn.preprocessing import LabelBinarizer, OneHotEncoder
 from pydantic import BaseModel
 
 
 class InputData(BaseModel):
     age: int
-    workclass: str 
+    workclass: str
     fnlgt: int
     education: str
-    education_num: int
     marital_status: str
     occupation: str
     relationship: str
     race: str
     sex: str
-    capital_gain: int
-    capital_loss: int
     hours_per_week: int
     native_country: str
 
@@ -83,7 +80,7 @@ def process_data(
         Trained LabelBinarizer if training is True, otherwise returns the binarizer
         passed in.
     """
- 
+
     if label is not None:
         y = X[label]
         X = X.drop([label], axis=1)

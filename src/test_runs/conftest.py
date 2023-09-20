@@ -3,16 +3,16 @@ Units test with conftest data
 """
 
 import os
+import pickle
 import pytest
 import pandas as pd
-import pickle
 import yaml
 from sklearn.model_selection import train_test_split
 from src.ml.data import process_data
 
 
-filepath = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../"))
-with open(os.path.join(filepath, "config.yaml"), "r") as fp:
+config_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../"))
+with open(os.path.join(config_path, "config.yaml"), "r") as fp:
     config = yaml.safe_load(fp)
 
 
@@ -42,7 +42,7 @@ def trained_model():
     model: sklearn model
         Loaded model
     """
-    
+
     filepath = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../model"))
     filename = os.path.join(filepath, "trained_model.pkl")
 
@@ -127,7 +127,7 @@ def test_data(data, cat_features, trained_encoder, trained_lb):
     """
 
     # train_test_split
-    train, test = train_test_split(data, test_size=0.20, random_state=123, stratify=data['salary'])
+    _, test = train_test_split(data, test_size=0.20, random_state=123, stratify=data['salary'])
 
     # process data to create test dataset
     X_test, y_test, _, _ = process_data(
@@ -140,3 +140,32 @@ def test_data(data, cat_features, trained_encoder, trained_lb):
     )
 
     return X_test, y_test
+
+
+@pytest.fixture(scope='session')
+def sample_data():
+    """
+    Sample data
+
+    Return
+    ------
+    df: pd.DataFrame
+        Loaded clean data
+    """
+    test_sample = {
+            "age": 39,
+            "workclass": "State-gov",
+            "fnlgt": 77516,
+            "education": "Bachelors",
+            "marital_status": "Never-married",
+            "occupation": "Adm-clerical",
+            "relationship": "Not-in-family",
+            "race": "White",
+            "sex": "Male",
+            "hours_per_week": 40,
+            "native_country": "United-States"
+            }
+            
+    df_test_sample = pd.DataFrame([test_sample])
+    
+    return df_test_sample

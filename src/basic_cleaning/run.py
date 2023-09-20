@@ -5,11 +5,11 @@ Author: Kay Sun
 Date: September 20 2023
 """
 
+import os
 import argparse
 import logging
 import wandb
 import pandas as pd
-import os
 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
@@ -42,7 +42,7 @@ def go(args):
         remove = df[column] == '?'
         df = df[~remove]
 
-    # drop columns with mostly constants (capital-gain/loss) and already represented 
+    # drop columns with mostly constants (capital-gain/loss) and already represented
     # by other column (education-num)
     df.drop(["education-num", "capital-gain", "capital-loss"], axis=1, inplace=True)
 

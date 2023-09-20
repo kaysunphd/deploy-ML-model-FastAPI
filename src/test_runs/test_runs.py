@@ -5,13 +5,11 @@ Author: Kay Sun
 Date: September 20 2023
 """
 
+import os
 import argparse
 import logging
-import wandb
-import pandas as pd
 import yaml
-import os
-from src.ml.model import inference, compute_model_metrics, make_inference
+from src.ml.model import inference, compute_model_metrics, make_inference, make_inference_labels
 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
@@ -30,14 +28,14 @@ def test_column_names(data):
 
     column_names = data.columns
     check =  all(name in column_names for name in cat_features)
-    assert check == True
+    assert check is True
 
 
 def test_inference(trained_model, test_data):
     """
     Check inference of trained model
     """
-
+    
     X_test, y_test = test_data
 
     try:
@@ -66,9 +64,22 @@ def test_make_inference(data, cat_features):
     """
     Check inference of trained model from raw data
     """
+    data = data.drop(["salary"], axis=1)
 
     try:
         predictions = make_inference(data, cat_features)
+    except RuntimeError as err:
+        logger.error("Inference failed, {err}")
+        raise err
+
+
+def test_make_inference_sample_data(sample_data, cat_features):
+    """
+    Check inference of trained model from raw data
+    """
+
+    try:
+        predictions = make_inference_labels(sample_data, cat_features)
     except RuntimeError as err:
         logger.error("Inference failed, {err}")
         raise err

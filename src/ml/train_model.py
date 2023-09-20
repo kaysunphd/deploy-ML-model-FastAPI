@@ -1,13 +1,16 @@
 #!/usr/bin/env python
 """
 Performs training on Random Forest Classifier model with GridSearch
+Author: Kay Sun
+Date: September 2023
 """
+
+import os
+import pickle
 import argparse
 import logging
 import wandb
 import pandas as pd
-import pickle
-import os
 import yaml
 from sklearn.model_selection import train_test_split
 from src.ml.data import load_data, process_data
@@ -54,7 +57,7 @@ def go(args):
     model_filename = os.path.join(output_path, "trained_model.pkl")
     with open(model_filename, 'wb') as fp:
         pickle.dump(model, fp)
-    
+
     # Save encoder
     encoder_filename = os.path.join(output_path, "trained_encoder.pkl")
     with open(encoder_filename, 'wb') as fp:
@@ -100,9 +103,17 @@ def go(args):
     run.summary['fbeta'] = fbeta
 
     # Compute metrics for slices of categorical feature
-    df_feature_metrics = pd.DataFrame(columns = ['Feature', 'Value', 'Precision', 'Recall', 'F-beta'])
+    df_feature_metrics = pd.DataFrame(columns=['Feature',
+                                                'Value',
+                                                'Precision',
+                                                'Recall',
+                                                'F-beta'])
     for feature in cat_features:
-        df_feature_metrics = pd.concat([df_feature_metrics, compute_model_metrics_on_slices(test, y_test, predictions, feature)])
+        df_feature_metrics = pd.concat([df_feature_metrics,
+                                        compute_model_metrics_on_slices(test,
+                                                                        y_test,
+                                                                        predictions,
+                                                                        feature)])
 
     df_feature_metrics.to_csv(os.path.join(output_path, "slice_output.txt"), index=False)
 
@@ -118,21 +129,6 @@ if __name__ == "__main__":
         help="Name of cleaned data",
         required=True
     )
-
-    # parser.add_argument(
-    #     "--output_model", 
-    #     type=str,
-    #     help="Name of output model",
-    #     required=True
-    # )
-
-    # parser.add_argument(
-    #     "--output_encoder", 
-    #     type=str,
-    #     help="Name of output encoder",
-    #     required=True
-    # )
-
 
     args = parser.parse_args()
 
