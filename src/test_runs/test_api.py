@@ -70,4 +70,4 @@ def test_inference_labels():
     response = client.post("/inference_labels", json=test_sample)
 
     assert response.status_code == 200
-    assert response.json()['prediction'] == "<=50K"
+    assert response.json()['prediction'][0] == "<=50K"

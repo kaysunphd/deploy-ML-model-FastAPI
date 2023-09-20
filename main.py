@@ -64,4 +64,4 @@ async def inference_labels(input_data: InputData):
 
     predict_labels = make_inference_labels(df_input_data, cat_features)
 
-    return {"prediction": predict_labels[0]}
+    return {"prediction": predict_labels}

@@ -205,6 +205,6 @@ def make_inference_labels(X, cat_features):
 
     predictions_list = make_inference(X, cat_features)
 
-    label_predictions = lb.inverse_transform(np.array(predictions_list))
+    label_predictions = lb.inverse_transform(np.array(predictions_list)).tolist()
 
     return label_predictions
