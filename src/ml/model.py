@@ -1,7 +1,10 @@
 import pandas as pd
+import os
+import pickle
 from sklearn.model_selection import GridSearchCV
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import fbeta_score, precision_score, recall_score
+from src.ml.data import process_data
 
 
 # Optional: implement hyperparameter tuning.
@@ -75,7 +78,7 @@ def inference(model, X):
 
     Inputs
     ------
-    model : Hypoerparameter tunned Random Forest Classifier
+    model : Hyperparameter tunned Random Forest Classifier
         Trained machine learning model.
     X : np.array
         Data used for prediction.
@@ -88,6 +91,7 @@ def inference(model, X):
     predictions = model.predict(X)
 
     return predictions
+
 
 def compute_model_metrics_on_slices(test_X, test_Y, test_pred, feature):
     feature_values = test_X[feature].unique().tolist()
@@ -102,3 +106,44 @@ def compute_model_metrics_on_slices(test_X, test_Y, test_pred, feature):
     
     df_selected_metrics = pd.DataFrame(selected_metrics, columns = ['Feature', 'Value', 'Precision', 'Recall', 'F-beta'])
     return df_selected_metrics
+
+
+def make_inference(X, cat_features):
+    """ Run model inferences pipeline, make inference and return the predictions.
+
+    Inputs
+    ------
+    X : np.array
+        Data used for prediction.
+    cat_features: list of strings
+        List of categorical features.
+
+    Returns
+    -------
+    preds : np.array
+        Predictions from the model.
+    """
+
+    # Load saved mode, encoder, lb
+    filepath = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../model"))
+    model_filename = os.path.join(filepath, "trained_model.pkl")
+    encoder_filename = os.path.join(filepath, "trained_encoder.pkl")
+
+    with open(model_filename, 'rb') as fp:
+        model = pickle.load(fp)
+
+    with open(encoder_filename, 'rb') as fp:
+        encoder = pickle.load(fp)
+
+    # Proces the query data with the process_data function.
+    X_test, _, _, _ = process_data(
+        X,
+        categorical_features=cat_features,
+        label="salary",
+        training=False,
+        encoder=encoder,
+    )
+
+    predictions = model.predict(X_test)
+
+    return predictions

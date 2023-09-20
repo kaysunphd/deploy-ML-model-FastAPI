@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 """
 Performs basic cleaning on raw data
+Author: Kay Sun
+Date: September 20 2023
 """
+
 import argparse
 import logging
 import wandb
@@ -20,7 +23,8 @@ def go(args):
 
     # load raw dataset
     logger.info("Loading local census data")
-    df = pd.read_csv("../../data/census.csv")
+    input_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../data"))
+    df = pd.read_csv(os.path.join(input_path, "census.csv"))
 
     # remove prevailing whitespace in column names
     logger.info("Removing whitespaces from column names and values")
@@ -42,10 +46,13 @@ def go(args):
     # by other column (education-num)
     df.drop(["education-num", "capital-gain", "capital-loss"], axis=1, inplace=True)
 
+    # replace dashes to underscore in column names for FastAPI
+    df.columns = df.columns.str.replace("-", "_")
+
     # save cleaned dataset
     logger.info("Writing to local data folder")
     filename = args.output_artifact
-    df.to_csv(os.path.join("../../data", filename), index=False)
+    df.to_csv(os.path.join(input_path, filename), index=False)
 
 
 if __name__ == "__main__":

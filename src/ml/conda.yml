@@ -7,6 +7,8 @@ dependencies:
   - pandas
   - numpy
   - mlflow
+  - pydantic
+  - yaml
   - pip
   - pip:
       - wandb

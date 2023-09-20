@@ -6,8 +6,14 @@ import os
 import pytest
 import pandas as pd
 import pickle
+import yaml
 from sklearn.model_selection import train_test_split
-from ml.data import process_data
+from src.ml.data import process_data
+
+
+filepath = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../"))
+with open(os.path.join(filepath, "config.yaml"), "r") as fp:
+    config = yaml.safe_load(fp)
 
 
 @pytest.fixture(scope='session')
@@ -20,8 +26,8 @@ def data():
     df: pd.DataFrame
         Loaded clean data
     """
-
-    df = pd.read_csv("data/cleaned_census.csv")
+    filepath = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../data"))
+    df = pd.read_csv(os.path.join(filepath, "cleaned_census.csv"))
 
     return df
 
@@ -36,9 +42,9 @@ def trained_model():
     model: sklearn model
         Loaded model
     """
-
-    output_path = "model"
-    filename = os.path.join(output_path, "trained_model.pkl")
+    
+    filepath = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../model"))
+    filename = os.path.join(filepath, "trained_model.pkl")
 
     with open(filename, 'rb') as fp:
         model = pickle.load(fp)
@@ -57,8 +63,8 @@ def trained_encoder():
         Loaded encoder
     """
 
-    output_path = "model"
-    filename = os.path.join(output_path, "trained_encoder.pkl")
+    filepath = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../model"))
+    filename = os.path.join(filepath, "trained_encoder.pkl")
 
     with open(filename, 'rb') as fp:
         encoder = pickle.load(fp)
@@ -77,8 +83,8 @@ def trained_lb():
         Loaded binarizer
     """
 
-    output_path = "model"
-    filename = os.path.join(output_path, "trained_lb.pkl")
+    filepath = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../model"))
+    filename = os.path.join(filepath, "trained_lb.pkl")
 
     with open(filename, 'rb') as fp:
         lb = pickle.load(fp)
@@ -97,16 +103,8 @@ def cat_features():
                 List of categorical feature names
     """
 
-    cat_features = [
-        "workclass",
-        "education",
-        "marital-status",
-        "occupation",
-        "relationship",
-        "race",
-        "sex",
-        "native-country",
-    ]
+    cat_features = config['data']['cat_features']
+
     return cat_features
 
 

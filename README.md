@@ -41,3 +41,15 @@ Working in a command line environment is recommended for ease of use with git an
     * Hint: think about how paths will differ in your local environment vs. on Heroku.
     * Hint: development in Python is fast! But how fast you can iterate slows down if you rely on your CI/CD to fail before fixing an issue. I like to run flake8 locally before I commit changes.
 * Write a script that uses the requests module to do one POST on your live API.
+
+
+# To run
+in VSCode, update settings.json to
+{
+    "files.autoSave": "afterDelay",
+    "terminal.integrated.env.osx": { "PYTHONPATH": "${workspaceFolder}" }
+}
+
+mlflow run src/basic_cleaning -P output_artifact="cleaned_census.csv" -P output_type="clean_sample" -P output_description="Cleaned data"
+mlflow run src/ml -P input_artifact="cleaned_census.csv"
+mlflow run src/test_runs 

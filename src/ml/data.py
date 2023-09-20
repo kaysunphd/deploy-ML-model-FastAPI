@@ -2,6 +2,24 @@ import numpy as np
 import pandas as pd
 import os
 from sklearn.preprocessing import LabelBinarizer, OneHotEncoder
+from pydantic import BaseModel
+
+
+class InputData(BaseModel):
+    age: int
+    workclass: str 
+    fnlgt: int
+    education: str
+    education_num: int
+    marital_status: str
+    occupation: str
+    relationship: str
+    race: str
+    sex: str
+    capital_gain: int
+    capital_loss: int
+    hours_per_week: int
+    native_country: str
 
 
 def load_data(filename):
@@ -18,8 +36,8 @@ def load_data(filename):
     df: pd.DataFrame
         dataframe of loaded clean data
     """
- 
-    df = pd.read_csv(os.path.join("../../data", filename))
+    filepath = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../data"))
+    df = pd.read_csv(os.path.join(filepath, filename))
     return df
 
 

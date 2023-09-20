@@ -1,33 +1,33 @@
 #!/usr/bin/env python
 """
 Perform unit tests on pipeline
+Author: Kay Sun
+Date: September 20 2023
 """
+
 import argparse
 import logging
 import wandb
 import pandas as pd
-from ml.model import inference, compute_model_metrics
+import yaml
+import os
+from src.ml.model import inference, compute_model_metrics, make_inference
 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
 logger = logging.getLogger()
 
+filepath = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../"))
+with open(os.path.join(filepath, "config.yaml"), "r") as fp:
+    config = yaml.safe_load(fp)
 
-def test_column_names(data: pd.DataFrame):
+
+def test_column_names(data):
     """
     Check if categorical features in process_data is in cleaned data
     """
+    cat_features = config['data']['cat_features']
 
-    cat_features = [
-        "workclass",
-        "education",
-        "marital-status",
-        "occupation",
-        "relationship",
-        "race",
-        "sex",
-        "native-country",
-    ]
     column_names = data.columns
     check =  all(name in column_names for name in cat_features)
     assert check == True
@@ -41,7 +41,7 @@ def test_inference(trained_model, test_data):
     X_test, y_test = test_data
 
     try:
-        predictions = trained_model.predict(X_test)
+        predictions = inference(trained_model, X_test)
     except RuntimeError as err:
         logger.error("Inference failed, {err}")
         raise err
@@ -59,4 +59,16 @@ def test_compute_metrics(trained_model, test_data):
         precise, recall, fbeta = compute_model_metrics(y_test, predictions)
     except Exception as err:
         logger.error("Performance metrics calculations failed, {err}")
+        raise err
+
+
+def test_make_inference(data, cat_features):
+    """
+    Check inference of trained model from raw data
+    """
+
+    try:
+        predictions = make_inference(data, cat_features)
+    except RuntimeError as err:
+        logger.error("Inference failed, {err}")
         raise err

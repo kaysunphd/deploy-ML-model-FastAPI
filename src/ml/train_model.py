@@ -8,13 +8,18 @@ import wandb
 import pandas as pd
 import pickle
 import os
+import yaml
 from sklearn.model_selection import train_test_split
-from data import load_data, process_data
-from model import train_model, inference, compute_model_metrics, compute_model_metrics_on_slices
+from src.ml.data import load_data, process_data
+from src.ml.model import train_model, inference, compute_model_metrics, compute_model_metrics_on_slices
 
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)-15s %(message)s")
 logger = logging.getLogger()
+
+filepath = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../"))
+with open(os.path.join(filepath, "config.yaml"), "r") as fp:
+    config = yaml.safe_load(fp)
 
 
 def go(args):
@@ -31,16 +36,8 @@ def go(args):
     train, test = train_test_split(data, test_size=0.20, random_state=123, stratify=data['salary'])
 
     logger.info("Process data")
-    cat_features = [
-        "workclass",
-        "education",
-        "marital-status",
-        "occupation",
-        "relationship",
-        "race",
-        "sex",
-        "native-country",
-    ]
+    cat_features = config['data']['cat_features']
+
     X_train, y_train, encoder, lb = process_data(
         train,
         categorical_features=cat_features,
@@ -52,7 +49,8 @@ def go(args):
     logger.info("Train and save model")
     model = train_model(X_train, y_train)
 
-    output_path = "../../model"
+    output_path = os.path.normpath(os.path.join(os.path.dirname(__file__), "../../model"))
+
     model_filename = os.path.join(output_path, "trained_model.pkl")
     with open(model_filename, 'wb') as fp:
         pickle.dump(model, fp)
@@ -106,7 +104,7 @@ def go(args):
     for feature in cat_features:
         df_feature_metrics = pd.concat([df_feature_metrics, compute_model_metrics_on_slices(test, y_test, predictions, feature)])
 
-    df_feature_metrics.to_csv("../../model/slice_output.txt", index=False)
+    df_feature_metrics.to_csv(os.path.join(output_path, "slice_output.txt"), index=False)
 
 
 if __name__ == "__main__":
