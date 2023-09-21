@@ -49,7 +49,7 @@ def test_inference():
     assert response.json()['prediction'][0] == 0
 
 
-def test_inference_labels():
+def test_inference_labels_negative():
     """
     Check inference labels
     """
@@ -71,3 +71,27 @@ def test_inference_labels():
 
     assert response.status_code == 200
     assert response.json()['prediction'][0] == "<=50K"
+
+
+def test_inference_labels_positive():
+    """
+    Check inference labels
+    """
+    test_sample = {
+            "age": 52,
+            "workclass": "Self-emp-not-inc",
+            "fnlgt": 209642,
+            "education": "HS-grad",
+            "marital_status": "Married-civ-spouse",
+            "occupation": "Exec-managerial",
+            "relationship": "Husband",
+            "race": "White",
+            "sex": "Male",
+            "hours_per_week": 45,
+            "native_country": "United-States"
+            }
+
+    response = client.post("/inference_labels", json=test_sample)
+
+    assert response.status_code == 200
+    assert response.json()['prediction'][0] == ">50K"

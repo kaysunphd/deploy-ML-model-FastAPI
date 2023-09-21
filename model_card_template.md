@@ -12,7 +12,7 @@ For additional information see the Model Card paper: https://arxiv.org/pdf/1810.
 <br>
 
 ## Training Data
-#### Source of data is from [Census data](https://archive.ics.uci.edu/dataset/20/census+income). 5-folds cross-validation on 80% of raw data.
+#### Source of data is from [Census data](https://archive.ics.uci.edu/dataset/20/census+income). 5-folds cross-validation on 80% of raw data. F1 score was used for scoring
 <br>
 
 ## Evaluation Data
@@ -20,7 +20,8 @@ For additional information see the Model Card paper: https://arxiv.org/pdf/1810.
 <br>
 
 ## Metrics
-#### Metrics used included precision, recall and fbeta since the target class is imbalanced.
+#### Evaluation metrics used included precision, recall and fbeta since the target class is imbalanced.
+#### Metrics for evaluation data: precision 0.713672, recall 0.552597, fbeta 0.622889
 <br>
 
 ## Ethical Considerations
