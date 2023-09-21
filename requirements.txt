@@ -1,0 +1,16 @@
+fastapi @ file:///home/conda/feedstock_root/build_artifacts/fastapi_1693793259089/work
+numpy==1.23.5
+pandas @ file:///Users/runner/miniforge3/conda-bld/pandas_1693415278066/work
+fastapi
+flake8
+gunicorn
+httpx
+numpy
+pandas
+pydantic
+pytest
+pyyaml
+requests
+scikit-learn
+uvicorn
+wandb
