@@ -18,6 +18,26 @@ class InputData(BaseModel):
     hours_per_week: int
     native_country: str
 
+    model_config = {
+        "json_schema_extra": {
+            "examples": [
+                {
+                    "age": 39,
+                    "workclass": "State-gov",
+                    "fnlgt": 77516,
+                    "education": "Bachelors",
+                    "marital_status": "Never-married",
+                    "occupation": "Adm-clerical",
+                    "relationship": "Not-in-family",
+                    "race": "White",
+                    "sex": "Male",
+                    "hours_per_week": 40,
+                    "native_country": "United-States"
+                }
+            ]
+        }
+    }
+
 
 def load_data(filename):
     """
