@@ -9,5 +9,5 @@ httpx
 wandb
 numpy
 requests
-univcorn
+uvicorn
 gunicorn
