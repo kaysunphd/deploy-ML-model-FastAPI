@@ -52,4 +52,8 @@ in VSCode, update settings.json to
 
 mlflow run src/basic_cleaning -P output_artifact="cleaned_census.csv" -P output_type="clean_sample" -P output_description="Cleaned data"
 mlflow run src/ml -P input_artifact="cleaned_census.csv"
-mlflow run src/test_runs 
+mlflow run src/test_runs
+
+Render
+Environment: PYTHON_VERSION | 3.11.5
+Buikd Command: pip install --upgrade pip -r requirements.txt
