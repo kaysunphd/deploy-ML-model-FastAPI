@@ -7,3 +7,7 @@ pyyaml
 fastapi
 httpx
 wandb
+numpy
+requests
+univcorn
+gunicorn
